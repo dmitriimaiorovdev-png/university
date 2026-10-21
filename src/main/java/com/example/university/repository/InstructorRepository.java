@@ -1,9 +1,10 @@
 package com.example.university.repository;
 
+import java.util.Optional;
 
 import com.example.university.model.Instructor;
 import jakarta.persistence.LockModeType;
-import org.hibernate.internal.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
