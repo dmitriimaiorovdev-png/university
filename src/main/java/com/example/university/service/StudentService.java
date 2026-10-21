@@ -39,7 +39,7 @@ public class StudentService {
                     HttpStatus.NOT_FOUND, "Cannot delete. Student not found with id: " + id
             );
     	}
-    	///
+    	studentRepository.deleteById(id);///
     }
 
     public Student updateStudent(Long id, Student updatedStudent) {
