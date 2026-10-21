@@ -2,9 +2,13 @@ package com.example.university.service;
 
 import com.example.university.model.Student;
 import com.example.university.repository.StudentRepository;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -24,19 +28,27 @@ public class StudentService {
     }
 
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).orElse(null);
+    	 return studentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
+                 HttpStatus.NOT_FOUND, "Student not found with id: " + id));
     }
 
     public void deleteStudent(Long id) {
-        studentRepository.deleteById(id);
+    	if (!studentRepository.existsById(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Cannot delete. Student not found with id: " + id
+            );
+    	}
     }
 
     public Student updateStudent(Long id, Student updatedStudent) {
-        Student student = studentRepository.findById(id).orElse(null);
+    	 Optional<Student> studentOptional = studentRepository.findById(id);
 
-        if (student == null) {
-            return null;
+        if (studentOptional == null) {
+        	throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Student not found with id: " + id);
         }
+
+        Student student = studentOptional.get();
 
         student.setFullName(updatedStudent.getFullName());
         student.setEmail(updatedStudent.getEmail());
